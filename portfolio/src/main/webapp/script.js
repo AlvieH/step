@@ -26,3 +26,12 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
+
+/**
+* Plays a specified melody
+ */
+function play(melody) {
+    path = "files/audio/";
+    var sound = new Audio(path + melody + ".mp3");
+    sound.play();
+}
