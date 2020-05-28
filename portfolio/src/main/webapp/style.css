@@ -18,6 +18,14 @@
     src: url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600&display=swap");
 }
 
+@keyframes loadIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
 
 #content {
     margin-left: auto;
@@ -162,4 +170,20 @@ nav a:hover {
 .about-section {
     margin-bottom: 20px;
     text-decoration: none;
+}
+
+.div-wrapper {
+    text-align: center;
+}
+
+.pdfobject-container {
+    width: 100%;
+    max-width: 1000px;
+    height: 550px;
+    margin: 2em 0;
+    display: inline-block;
+}
+
+.pdfobject {
+    border: solid 3px #ff5555;
 }

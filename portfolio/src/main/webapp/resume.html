@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>Alvin Hermans</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap">
+  <script src="script.js"></script>
+  <script src="pdfobject.min.js"></script>
+</head>
+<header>
+  <nav class="nav">
+    <div class="title">Alvin Hermans</div>
+    <ul class="menu-links">
+      <li><a href="index.html">Projects</a></li>
+      <li><a href="about.html">About Me</a></li>
+      <li><div class="nav-active">Resume</div></li>
+    </ul>
+    <ul class="contact-links">
+    </ul>
+  </nav>
+</header>
+<body>
+    <div class="div-wrapper">
+      <div id="resume"></div>
+    </div>
+    <script>PDFObject.embed("/files/AlvinHermansResume.pdf", "#resume");</script>
+</body>
