@@ -11,7 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+const AUDIO_LOCATION_ = "/files/audio/"
 /**
  * Adds a random greeting to the page.
  */
@@ -31,7 +31,6 @@ function addRandomGreeting() {
 * Plays a specified melody
  */
 function play(melody) {
-    path = "files/audio/";
-    var sound = new Audio(path + melody + ".mp3");
-    sound.play();
+  const sound = new Audio(AUDIO_LOCATION_ + melody + ".mp3");
+  sound.play();
 }
