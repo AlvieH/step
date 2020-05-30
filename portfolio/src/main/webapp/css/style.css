@@ -1,27 +1,3 @@
-@font-face {
-  font-family: 'Roboto Mono';
-  src: url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap');
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-}
-
-@font-face {
-  font-family: 'Work Sans';
-  src: url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500&display=swap");
-}
-
-@font-face {
-  font-family: 'Fira Sans';
-  src: url("https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600&display=swap");
-}
-
-@font-face {
-  font-family: 'Fira Mono';
-  src: url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500&display=swap');
-}
 
 @keyframes loadIn {
   0% {
@@ -42,6 +18,54 @@ body {
   background: #282a36;
 }
 
+h1 {
+  color: #ffb86c;
+  font-family: 'Roboto Mono', sans-serif;
+  font-size: 24pt;
+  font-weight: 400;
+  display: block;
+  margin-right: auto;
+}
+
+h2 {
+  color: #8be9fd;
+  font-family: 'Roboto Mono', sans-serif;
+  font-size: 16pt;
+  font-weight: 400;
+  display: inline-block;
+  margin-bottom: 6px;
+  margin-top: 10px;
+}
+
+.project-section {
+  margin-left: 7%;
+  margin-top: 2%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.project-div {
+  margin-left: 5%;
+  
+}
+
+.project-role {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  display: block;
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 400;
+  color: #ff79c6;
+}
+
+.project-info {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 300;
+  color: #ff79c6;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
 #greeting-container {
   margin-top: 20px;
 }
@@ -76,20 +100,23 @@ nav {
 
 .menu-links {
   margin-right: 500px;
-  margin-left: none;
+  margin-left: 5px;
   display: inline-block;
+  margin-top: 17px;
+  padding-left: 6px;
 }
 
 .contact-links {
-  margin-right: none;
-  margin-left: auto;
-  display: inline-block;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  left: auto;
 }
 
 .contact-links a {
   float: right;
   margin: auto 10px;
-  transition: all 0.3s ease 0s;
+  transition: color 0.3s ease 0s;
 }
 
 nav ul {
@@ -103,7 +130,7 @@ nav li {
 
 .contact-links i {
   color: #f8f8f2;
-  transition: all 0.3s ease 0s;
+  transition: color 0.3s ease 0s;
 }
 
 .contact-links i:hover {
@@ -111,37 +138,45 @@ nav li {
 }
 
 .menu-links a, .nav-active {
-  font-family: 'Fira Mono', sans-serif, normal;
+  font-family: 'Roboto Mono', sans-serif, normal;
   font-size: 16pt;
   text-align: center;
-  margin: 5px 20px;
-  transition: all 0.3s ease 0s;
+  margin-left: 20px;
+  transition: color 0.3s ease 0s;
   text-decoration: none;
 }
 
 nav .menu-links a {
   color: #f8f8f2;
-  margin: 5px 20px;
 }
 
 .nav-active {
   color: #ffb86c;
 }
 
-nav .menu-links a:hover {
+nav .menu-links a:hover, .title:hover {
   color: #ff79c6;
 }
 
-.title {
+.title, .title-active {
   cursor: pointer;
   float: left;
-  color: #f8f8f2;
-  font-family: 'Fira Mono', normal, sans-serif;
+  font-family: 'Roboto Mono', normal, sans-serif;
   font-size: 24pt;
-  padding-right: 20px;
-  margin-right: auto;
-  margin-top: 10px;
-  padding-left: 40px;
+  padding-right: none;
+  margin-right: none;
+  margin-top: 9px;
+  padding-left: 30px;
+  transition: color 0.3s ease 0s;
+  text-decoration: none;
+}
+
+.title {
+  color: #f8f8f2;
+}
+
+.title-active {
+  color: #ffb86c;
 }
 
 .about-me {
@@ -156,6 +191,30 @@ nav .menu-links a:hover {
   width: 30%;
   margin-left: 200px;
   border: 2pt solid #ffb86c;
+}
+
+.abstract {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 12pt;
+  color: #f8f8f2;
+}
+
+.abstract-wrapper {
+  background: #000;
+  border-radius: 5px;
+  display: none;
+  padding: 10px 10px;
+  margin-right: 30px;
+}
+
+.project-button {
+  background-color: rgba(0, 0, 0, 1);
+  font-family: 'Roboto Mono', sans-serif;
+  color: #8be9fd;
+  display: block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 3px;
 }
 
 .bio-text {
@@ -184,7 +243,7 @@ nav .menu-links a:hover {
 .bio-link {
   display: inline;
   text-decoration: none;
-  transition: all 0.3s ease 0s;
+  transition: color 0.3s ease 0s;
   color: rgba(139, 233, 253, 1);
   font-weight: 500;
   padding: 0;
@@ -211,11 +270,7 @@ nav .menu-links a:hover {
 .pdfobject-container {
   width: 100%;
   max-width: 1000px;
-  height: 550px;
+  height: 650px;
   margin: 2em 0;
   display: inline-block;
-}
-
-.pdfobject {
-  border: solid 3px #ff5555;
 }

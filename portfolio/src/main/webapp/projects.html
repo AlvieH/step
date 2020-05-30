@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Alvin Hermans</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500&family=Roboto+Condensed:wght@300;400&family=Roboto+Mono:wght@300;400;500&display=swap" 
+      rel="stylesheet">
+    <script src="script.js"></script>
+  </head>
+  <header>
+    <nav class="nav">
+      <a href="index.html" class="title">alvin_hermans</a>
+      <ul class="menu-links">
+        <li><div class="nav-active">projects</div></li>
+        <li><a href="resume.html">resume</a></li>
+      </ul>
+      <ul class="contact-links">
+        <li><a href="https://github.com/AlvieH"><i class="fab fa-github fa-lg"></i></a></li>
+        <li><a href="https://www.linkedin.com/in/aherma"><i class="fab fa-linkedin-in fa-lg"></i></a></li>
+        <li><a href="mailto:alvinhermans123@gmail.com"><i class="fas fa-paper-plane fa-lg"></i></a></li>
+      </ul>
+    </nav>
+  </header>
+  <body>
+    <div class="project-section">
+      <h1 class="project-section-title">Research</h1>
+        <div class="project-div">
+          <h2 class="project-title">
+            Exposing Error in Poverty Management Technology: A Method for Auditing Government Benefits Screening Tools
+          </h2>
+          <p class="project-role">Assistant to Lead Investigator</p>
+          <p class="project-role">Lead Investigators: Nikola Banovic and Nel Escher</p>
+          <span class="project-info">In PACM HCI. 4, CSCW1, Article 64 (May 2020) (CSCW 2020). ACM, New York, NY, USA, 20 pages.</span>
+          <button class="project-button" id="audit-button" onclick="slideToggle('audit-abstract', 500)">Show/Hide Abstract</button>
+          <div class="abstract-wrapper" id="audit-abstract">
+            <span class="abstract">Public benefits programs help people afford necessities like food, housing, and healthcare. 
+              In the US, such programs are means-tested: applicants must complete long forms to prove financial distress before 
+              receiving aid. Online benefits screening tools provide a gloss of such forms, advising households about their eligibility 
+              prior to completing full applications. If incorrectly implemented, screening tools may discourage qualified households from 
+              applying for benefits. Unfortunately, errors in screening tools are difficult to detect because they surface one at a time and 
+              difficult to contest because unofficial determinations do not generate a paper trail. We introduce a method for auditing such tools 
+              in four steps: 1) generate test households, 2) automatically populate screening questions with household information and retrieve determinations, 
+              3) translate eligibility guidelines into computer code to generate ground truth determinations, and 4) identify conflicting determinations to 
+              detect errors. We illustrated our method on a real screening tool with households modeled from census data. Our method exposed major 
+              errors with corresponding examples to reproduce them. Our work provides a necessary corrective to an already arduous benefits application process.
+            </span>
+          </div>
+        </div>
+    </div>
+  </body>
+</html>
