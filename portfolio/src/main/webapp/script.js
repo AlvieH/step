@@ -38,8 +38,7 @@ const play = (melody) => {
 /*
 * Slides shown element up given id and animation duration in ms
 */
-const slideUp = (elementId, duration) =>
-{
+const slideUp = (elementId, duration) => {
   var element = document.getElementById(elementId);
 
   /* set element up to be animated */
@@ -72,8 +71,7 @@ const slideUp = (elementId, duration) =>
 }
 
 /* Slide hidden element with given ID down, lasting duration ms */
-const slideDown = (elementId, duration) =>
-{
+const slideDown = (elementId, duration) => {
   var element = document.getElementById(elementId);
 
   /* resetting element's display properties to block */
@@ -109,8 +107,7 @@ const slideDown = (elementId, duration) =>
 }
 
 /* resets element's style presets to 0 for slideUp/slideDown */
-const hideEl = (element) =>
-{
+const hideEl = (element) => {
   element.style.height = 0;
   element.style.paddingTop = 0;
   element.style.paddingBottom = 0;
