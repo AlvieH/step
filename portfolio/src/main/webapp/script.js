@@ -15,7 +15,7 @@ const AUDIO_LOCATION_ = "/files/audio/"
 /**
  * Adds a random greeting to the page.
  */
-function addRandomGreeting() {
+const addRandomGreeting = () => {
   const greetings =
       ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
 
@@ -30,30 +30,15 @@ function addRandomGreeting() {
 /**
 * Plays a specified melody
  */
-function play(melody) {
+const play = (melody) => {
   const sound = new Audio(AUDIO_LOCATION_ + melody + ".mp3");
   sound.play();
-}
-
-/**
-* toggles hide/show for specified element with id elementId
- */
-function show(elementId) {
-  const element = document.getElementById(elementId);
-
-  /* show element if hidden, hide if shown */
-  if (element.style.display == 'none') {
-    element.style.display = 'inline-block';
-  }
-  else {
-    element.style.display = 'none';
-  }
 }
 
 /*
 * Slides shown element up given id and animation duration in ms
 */
-let slideUp = (elementId, duration) =>
+const slideUp = (elementId, duration) =>
 {
   var element = document.getElementById(elementId);
 
@@ -87,7 +72,7 @@ let slideUp = (elementId, duration) =>
 }
 
 /* Slide hidden element with given ID down, lasting duration ms */
-let slideDown = (elementId, duration) =>
+const slideDown = (elementId, duration) =>
 {
   var element = document.getElementById(elementId);
 
@@ -124,7 +109,7 @@ let slideDown = (elementId, duration) =>
 }
 
 /* resets element's style presets to 0 for slideUp/slideDown */
-function hideEl(element)
+const hideEl = (element) =>
 {
   element.style.height = 0;
   element.style.paddingTop = 0;
@@ -135,7 +120,7 @@ function hideEl(element)
 }
 
 /* toggles btw slideUp/slideDown depending on element's display settings */
-function slideToggle(elementId, duration) {
+const slideToggle = (elementId, duration)  => {
   var element = document.getElementById(elementId);
   if(window.getComputedStyle(element).display === 'none')
   {
