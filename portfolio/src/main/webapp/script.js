@@ -145,3 +145,9 @@ function slideToggle(elementId, duration) {
     slideUp(elementId, duration);
   }
 }
+
+/* fetches comments content from webserver and adds to DOM in container with elementID */
+function addToDOM(elementId) {
+  fetch("/comments").then(response => response.text()).then((comments) =>
+  document.getElementById(elementId).innerText = comments);
+}
