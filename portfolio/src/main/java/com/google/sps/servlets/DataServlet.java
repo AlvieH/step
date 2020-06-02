@@ -15,6 +15,8 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
+import java.io.*;
+import java.util.Vector;
 import javax.servlet.annotation.WebServlet;
 import com.google.gson.Gson;
 import javax.servlet.http.HttpServlet;
@@ -26,28 +28,51 @@ import com.google.sps.comment.Comment;
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
-  //boilerplate test comments
-  private final String[] testCommentStrings = {"I hate this website!", "I am neutral about this website", "I love this website!"};
+  //Vector holds comment objects
+  private final Vector<Comment> comments;
+
+  //Default ctor
+  public DataServlet() {
+    comments = new Vector<Comment>();
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // import and process test comment strings into Comment objects
-    Comment[] testComments = new Comment[testCommentStrings.length];
-    for(int c = 0; c < testCommentStrings.length; ++c)
-    {
-      testComments[c] = new Comment(testCommentStrings[c]);
-    }
-
     //get list of Json objects and send response
-    String jsonObjects = convertToJson(testComments);
+    String jsonObjects = convertToJson(comments);
 
     response.setContentType("application/json;");
     response.getWriter().println(jsonObjects);
   }
 
   //converts given array of Comment objects to json objects using the Gson library
-  private String convertToJson(Comment[] comments) {
+  private String convertToJson(Vector<Comment> comments) {
     return new Gson().toJson(comments);
+  }
+
+  //Respond to post request, fetch content from form and submit to master array
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      // get input from form
+      Comment userComment = getUserInput(request);
+
+      // append comment to vector
+      appendNewComment(userComment);
+
+      // redirect back to HTML page
+      response.sendRedirect("/comments.html");
+  }
+
+  /* returns user input in comment form */
+  private Comment getUserInput(HttpServletRequest request) {
+    //get user input from form
+    String userCommentString = request.getParameter("comment-field");
+    
+    return new Comment(userCommentString);
+  }
+
+  /* adds new comment to this.comments */
+  private void appendNewComment (Comment newComment) {
+    comments.add(newComment);
   }
 }
