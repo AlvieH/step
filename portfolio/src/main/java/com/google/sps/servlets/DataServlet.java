@@ -32,17 +32,16 @@ public class DataServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // import and process test comment strings
+    // import and process test comment strings into Comment objects
     Comment[] testComments = new Comment[testCommentStrings.length];
     for(int c = 0; c < testCommentStrings.length; ++c)
     {
       testComments[c] = new Comment(testCommentStrings[c]);
     }
 
-    //get list of Json objects
+    //get list of Json objects and send response
     String jsonObjects = convertToJson(testComments);
 
-    //print Json objects
     response.setContentType("application/json;");
     response.getWriter().println(jsonObjects);
   }

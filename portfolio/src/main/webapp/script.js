@@ -128,17 +128,20 @@ const slideToggle = (elementId, duration)  => {
   }
 }
 
-/* fetches comments content from webserver and adds to DOM in container with elementID */
+/* fetches comments content from webserver and adds to DOM in container with id elementID */
 const addToDOM = (elementId) => {
   fetch("/comments").then(response => response.json()).then((comments) => {
+
     // add each parsed json.commentText to the DOM
     const destinationDiv = document.getElementById(elementId);
+    
     for (comment in comments) {
       destinationDiv.appendChild(createSpan(comments[comment].commentText));
     }
   });
 }
 
+/* creates a span element to be added to the DOM containing text 'text' */
 const createSpan = (text) => {
   const spanEl = document.createElement("span");
   spanEl.innerText = text;
