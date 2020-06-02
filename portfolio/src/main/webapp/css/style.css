@@ -1,0 +1,276 @@
+
+@keyframes loadIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+#content {
+  margin-left: auto;
+  margin-right: auto;
+  width: 650px;
+}
+
+body {
+  background: #282a36;
+}
+
+h1 {
+  color: #ffb86c;
+  font-family: 'Roboto Mono', sans-serif;
+  font-size: 24pt;
+  font-weight: 400;
+  display: block;
+  margin-right: auto;
+}
+
+h2 {
+  color: #8be9fd;
+  font-family: 'Roboto Mono', sans-serif;
+  font-size: 16pt;
+  font-weight: 400;
+  display: inline-block;
+  margin-bottom: 6px;
+  margin-top: 10px;
+}
+
+.project-section {
+  margin-left: 7%;
+  margin-top: 2%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.project-div {
+  margin-left: 5%;
+  
+}
+
+.project-role {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  display: block;
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 400;
+  color: #ff79c6;
+}
+
+.project-info {
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 300;
+  color: #ff79c6;
+  margin-top: 4px;
+  margin-bottom: 8px;
+}
+#greeting-container {
+  margin-top: 20px;
+}
+
+img.hail {
+  height: 20%;
+  width: 20%;
+}
+
+body {
+  padding-top: 70px;
+}
+
+/* navbar and navbar elements */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  vertical-align: middle;
+}
+
+nav {
+  top: 0;
+  width: 100%;
+  position: fixed;
+  overflow: hidden;
+  height: 70px;
+  background-color: rgba(16, 16, 23, 0.9);
+  right: 0;
+  left: 0;
+}
+
+.menu-links {
+  margin-right: 500px;
+  margin-left: 5px;
+  display: inline-block;
+  margin-top: 17px;
+  padding-left: 6px;
+}
+
+.contact-links {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  left: auto;
+}
+
+.contact-links a {
+  float: right;
+  margin: auto 10px;
+  transition: color 0.3s ease 0s;
+}
+
+nav ul {
+  list-style-type: none;
+}
+
+nav li {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.contact-links i {
+  color: #f8f8f2;
+  transition: color 0.3s ease 0s;
+}
+
+.contact-links i:hover {
+  color: #ff79c6;
+}
+
+.menu-links a, .nav-active {
+  font-family: 'Roboto Mono', sans-serif, normal;
+  font-size: 16pt;
+  text-align: center;
+  margin-left: 20px;
+  transition: color 0.3s ease 0s;
+  text-decoration: none;
+}
+
+nav .menu-links a {
+  color: #f8f8f2;
+}
+
+.nav-active {
+  color: #ffb86c;
+}
+
+nav .menu-links a:hover, .title:hover {
+  color: #ff79c6;
+}
+
+.title, .title-active {
+  cursor: pointer;
+  float: left;
+  font-family: 'Roboto Mono', normal, sans-serif;
+  font-size: 24pt;
+  padding-right: none;
+  margin-right: none;
+  margin-top: 9px;
+  padding-left: 30px;
+  transition: color 0.3s ease 0s;
+  text-decoration: none;
+}
+
+.title {
+  color: #f8f8f2;
+}
+
+.title-active {
+  color: #ffb86c;
+}
+
+.about-me {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 75px;
+}
+
+.profile-photo {
+  border-radius: 7%;
+  height: 30%;    
+  width: 30%;
+  margin-left: 200px;
+  border: 2pt solid #ffb86c;
+}
+
+.abstract {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 12pt;
+  color: #f8f8f2;
+}
+
+.abstract-wrapper {
+  background: #000;
+  border-radius: 5px;
+  display: none;
+  padding: 10px 10px;
+  margin-right: 30px;
+}
+
+.project-button {
+  background-color: rgba(0, 0, 0, 1);
+  font-family: 'Roboto Mono', sans-serif;
+  color: #8be9fd;
+  display: block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 3px;
+}
+
+.bio-text {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 16pt;
+  text-decoration: none;
+  margin-right: 120px;
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  vertical-align: top;
+  justify-content: flex-start;
+}
+
+.about-section span, .easter-egg-text {
+  color: #f8f8f2;
+}
+
+.easter-egg-text {
+  display: inline;
+  text-decoration: none;
+  padding: 0;
+  margin: 0;
+}
+
+.bio-link {
+  display: inline;
+  text-decoration: none;
+  transition: color 0.3s ease 0s;
+  color: rgba(139, 233, 253, 1);
+  font-weight: 500;
+  padding: 0;
+  margin: 0;
+}
+
+.bio-link:hover {
+  color: rgba(139, 233, 253, .8)
+}
+
+.about-section span {
+  display: inline-block;
+}
+
+.about-section {
+  margin-bottom: 20px;
+  text-decoration: none;
+}
+
+.div-wrapper {
+  text-align: center;
+}
+
+.pdfobject-container {
+  width: 100%;
+  max-width: 1000px;
+  height: 650px;
+  margin: 2em 0;
+  display: inline-block;
+}
