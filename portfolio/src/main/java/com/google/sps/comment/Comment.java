@@ -16,13 +16,13 @@ package com.google.sps.comment;
 
 /* Class containing comments and data relating to the comments */
 public final class Comment {
-  private final String commentText;
+  private final String text;
 
   public Comment(String text) {
-    this.commentText = text;
+    this.text = text;
   }
 
   public String getCommentText() {
-    return commentText;
+    return text;
   }
 }

@@ -22,31 +22,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.comment.Comment;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that handles comment data */
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
-  //boilerplate test comments
+  // boilerplate test comments.
   private final String[] testCommentStrings = {"I hate this website!", "I am neutral about this website", "I love this website!"};
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // import and process test comment strings into Comment objects
+    // import and process test comment strings into Comment objects.
     Comment[] testComments = new Comment[testCommentStrings.length];
-    for(int c = 0; c < testCommentStrings.length; ++c)
-    {
-      testComments[c] = new Comment(testCommentStrings[c]);
+    for(int i = 0; i < testCommentStrings.length; i++) {
+      testComments[i] = new Comment(testCommentStrings[i]);
     }
 
-    //get list of Json objects and send response
     String jsonObjects = convertToJson(testComments);
 
     response.setContentType("application/json;");
     response.getWriter().println(jsonObjects);
   }
 
-  //converts given array of Comment objects to json objects using the Gson library
+  // converts given comments to json.
   private String convertToJson(Comment[] comments) {
     return new Gson().toJson(comments);
   }
