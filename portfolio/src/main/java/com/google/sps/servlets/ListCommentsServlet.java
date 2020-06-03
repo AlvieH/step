@@ -14,6 +14,12 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import java.io.IOException;
 import java.io.*;
 import java.util.Vector;
@@ -24,20 +30,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.google.sps.comment.Comment;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/comments")
-public class DataServlet extends HttpServlet {
-
-  //Vector holds comment objects
-  private final Vector<Comment> comments;
-
-  //Default ctor
-  public DataServlet() {
-    comments = new Vector<Comment>();
-  }
-
+/** Servlet that is responsible for listing comments from datastore database */
+@WebServlet("/list-comments")
+public class ListCommentsServlet extends HttpServlet {
+  
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Query query = new Query("Comment").addSort("time", SortDirection.ASCENDING);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    // process and store raw data from query into comments
+    Vector<Comment> comments = new Vector();
+    for(Entity entity : results.asIterable()) {
+      String commentText = (String) entity.getProperty("text");
+      comments.add(new Comment(commentText));
+    }
 
     //get list of Json objects and send response
     String jsonObjects = convertToJson(comments);
@@ -49,30 +58,5 @@ public class DataServlet extends HttpServlet {
   //converts given array of Comment objects to json objects using the Gson library
   private String convertToJson(Vector<Comment> comments) {
     return new Gson().toJson(comments);
-  }
-
-  //Respond to post request, fetch content from form and submit to master array
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      // get input from form
-      Comment userComment = getUserInput(request);
-
-      // append comment to vector
-      appendNewComment(userComment);
-
-      // redirect back to HTML page
-      response.sendRedirect("/comments.html");
-  }
-
-  /* returns user input in comment form */
-  private Comment getUserInput(HttpServletRequest request) {
-    //get user input from form
-    String userCommentString = request.getParameter("comment-field");
-    
-    return new Comment(userCommentString);
-  }
-
-  /* adds new comment to this.comments */
-  private void appendNewComment (Comment newComment) {
-    comments.add(newComment);
   }
 }

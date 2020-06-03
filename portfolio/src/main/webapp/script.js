@@ -130,7 +130,7 @@ const slideToggle = (elementId, duration)  => {
 
 /* fetches comments content from webserver and adds to DOM in container with id elementID */
 const addToDOM = (elementId) => {
-  fetch("/comments").then(response => response.json()).then((comments) => {
+  fetch("/list-comments").then(response => response.json()).then((comments) => {
 
     // add each parsed json.commentText to the DOM
     const destinationDiv = document.getElementById(elementId);
