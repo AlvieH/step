@@ -274,3 +274,23 @@ nav .menu-links a:hover, .title:hover {
   margin: 2em 0;
   display: inline-block;
 }
+
+#comment-container {
+  background: #f8f8f2;
+  width: 50%;
+  display: block;
+  height: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+}
+
+#comment-container span {
+  display: block;
+  color: #282a36;
+  font-family: 'Fira Mono', sans-serif;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
