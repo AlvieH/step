@@ -41,22 +41,57 @@ public class ListCommentsServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    // process and store raw data from query into comments
-    Vector<Comment> comments = new Vector();
+    // Process and store raw data from query into comments
+    Vector<Comment> allComments = new Vector();
     for(Entity entity : results.asIterable()) {
       String commentText = (String) entity.getProperty("text");
-      comments.add(new Comment(commentText));
+      allComments.add(new Comment(commentText));
     }
 
-    //get list of Json objects and send response
-    String jsonObjects = convertToJson(comments);
+    // Filter allComments down to the most recent n, where n was the user selection
+    int numComments = getNumComments(request);
+    Vector<Comment> shownComments = newestComments(allComments, numComments);
+
+    // Get list of Json objects and send response
+    String jsonObjects = convertToJson(shownComments);
 
     response.setContentType("application/json;");
     response.getWriter().println(jsonObjects);
   }
 
-  //converts given array of Comment objects to json objects using the Gson library
+  // Converts given array of Comment objects to json objects using the Gson library
   private String convertToJson(Vector<Comment> comments) {
     return new Gson().toJson(comments);
+  }
+
+  // Gets 'num-comments' parameter from request and interprets.
+  // Returns positive int if num-comments is not 'all', 0 if 'all' was selected
+  private int getNumComments (HttpServletRequest request) {
+    String numCommentsString = request.getParameter("num-comments");
+    
+    if (numCommentsString.equals("all")) {
+      return 0;
+    }
+    else {
+      return Integer.parseInt(numCommentsString);
+    }
+  }
+
+  // Returns vector of newest n comments, where the returned vector is a subset of allComments and n=numComments.
+  private Vector<Comment> newestComments (Vector<Comment> allComments, int numComments) {
+    if (numComments == 0 || numComments > allComments.size()) {
+        numComments = allComments.size();
+    }
+
+    Vector<Comment> shownComments = new Vector(numComments);
+    shownComments.setSize(numComments);
+    int allCommentsIndex = allComments.size() - numComments;
+
+    // Copy last n comments into shownComments
+    for (int i = 0; i < numComments; i++, allCommentsIndex++) {
+      shownComments.setElementAt(allComments.get(allCommentsIndex), i);
+    }
+
+    return shownComments;
   }
 }

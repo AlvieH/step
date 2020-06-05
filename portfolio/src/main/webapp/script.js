@@ -129,14 +129,18 @@ const slideToggle = (elementId, duration)  => {
 }
 
 /* fetches comments content from webserver and adds to DOM in container with id elementID */
-const addToDOM = (elementId) => {
-  fetch("/list-comments").then(response => response.json()).then((comments) => {
+const addToDOM = (numComments, elementId) => {
+  const fetchUrl = "/list-comments?num-comments=" + numComments;
+  fetch(fetchUrl)
+  .then(response => response.json())
+  .then((comments) => {
 
-    // add each parsed json.commentText to the DOM
-    const destinationDiv = document.getElementById(elementId);
+    // add each parsed json.commentText to the DOM after clearing destination
+    const destination = document.getElementById(elementId);
+    destination.innerHTML = '';
     
     for (comment in comments) {
-      destinationDiv.appendChild(createSpan(comments[comment].commentText));
+      destination.appendChild(createSpan(comments[comment].commentText));
     }
   });
 }
@@ -146,4 +150,13 @@ const createSpan = (text) => {
   const spanEl = document.createElement("span");
   spanEl.innerText = text;
   return spanEl;
+}
+
+/* Deletes comment data from the server */
+const deleteCommentData = () => {
+  const request = new Request('/delete-comments', {method: 'POST'});
+  fetch(request)
+  .then(() => {
+    addToDOM(5, 'comment-container');
+  })
 }
