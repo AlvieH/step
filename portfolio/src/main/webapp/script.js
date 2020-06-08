@@ -127,3 +127,15 @@ const slideToggle = (elementId, duration)  => {
     slideUp(elementId, duration);
   }
 }
+
+/* Fetches upload url from blobstore url servlet and inserts it into images.html */
+const fetchBlobstoreUrl = () => {
+  fetch("/blobstore-upload-url")
+  .then((response) => {
+    return response.text();
+  })
+  .then((imageUrl) => {
+    const form = document.getElementById("image-form");
+    form.action = imageUrl;
+  })
+}
