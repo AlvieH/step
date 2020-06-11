@@ -10,6 +10,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500&family=Roboto+Condensed:wght@300;400&family=Roboto+Mono:wght@300;400;500&display=swap" 
       rel="stylesheet">
     <script src="script.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCib_0RH1hdeDTEpXE4QDt2EVukkmH3jvI&callback=initMap"
+  type="text/javascript"></script>
   </head>
   <header>
   <nav class="nav">
@@ -18,7 +20,7 @@
       <li><a href="projects.html">projects</a></li>
       <li><a href="resume.html">resume</a></li>
       <li><a href="comments.html">comments</a></li>
-      <li><div class="nav-active">images</div></li>
+      <li><div class="nav-active">maps</div></li>
     </ul>
     <ul class="contact-links">
       <li><a href="https://github.com/AlvieH"><i class="fab fa-github fa-lg"></i></a></li>
@@ -27,12 +29,17 @@
     </ul>
   </nav>
   </header>
-  <body onload="fetchBlobstoreUrl()">
-    <form id="image-form" method="POST" enctype="multipart/form-data">
-      <p>Upload an image:</p>
-      <input type="file" name="image">
+  <body onload="initializeMap();">
+    <form id="map-form" method="POST" action="/new-coffee-shop">
+      <p>Please put in the address of your favorite coffee place: </p>
+      <input type="text" name="address">
+      </br>
+      <p> Is your coffee place a starbucks?</p>
+      <input type="checkbox" name="starbucks" value="This place is a starbucks">
       </br></br>
       <button>Submit</button>
     </form>
+    <div id="map">
+    </div>
   </body>
 </html>

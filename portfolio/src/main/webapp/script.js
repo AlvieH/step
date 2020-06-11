@@ -139,3 +139,10 @@ const fetchBlobstoreUrl = () => {
     form.action = imageUrl;
   })
 }
+
+const initializeMap = () => {
+  const map = new google.maps.Map(document.getElementById("map"), {
+    center: {lat: 42.278481, lng: -83.740997}, 
+    zoom: 50
+  });
+}

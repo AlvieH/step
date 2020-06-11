@@ -14,24 +14,30 @@
 
 package com.google.sps.servlets;
 
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/* Web servlet that returns a fresh Blobstore upload URL */
-@WebServlet("/blobstore-upload-url")
-public class BlobstoreUploadUrlServlet extends HttpServlet {
-  
+/* Class responsible for uploading new coffee shops to datastore */
+@WebServlet("/new-cafe")
+public class NewCafeServlet extends HttpServlet {
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    BlobstoreService blobstore = BlobstoreServiceFactory.getBlobstoreService();
-    String uploadUrl = blobstore.createUploadUrl("/form-handler");
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String address = request.getParameter("address");
+    boolean isStarbucks = request.getParameter("starbucks") != null;
 
-    response.setContentType("text/html");
-    response.getWriter().println(uploadUrl);
+    Entity cafeEntity = new Entity("Cafe");
+    cafeEntity.setProperty("address", address);
+    cafeEntity.setProperty("starbucks", isStarbucks);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(cafeEntity);
+
+    response.sendRedirect("images.html");
   }
 }
