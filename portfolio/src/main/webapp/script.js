@@ -128,21 +128,49 @@ const slideToggle = (elementId, duration)  => {
   }
 }
 
-/* Fetches upload url from blobstore url servlet and inserts it into images.html */
-const fetchBlobstoreUrl = () => {
-  fetch("/blobstore-upload-url")
-  .then((response) => {
-    return response.text();
-  })
-  .then((imageUrl) => {
-    const form = document.getElementById("image-form");
-    form.action = imageUrl;
-  })
-}
-
-const initializeMap = () => {
+/* Initializes map object and calls setMarkers */
+async function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), {
     center: {lat: 42.278481, lng: -83.740997}, 
     zoom: 50
+  });
+
+  const geocoder = new google.maps.Geocoder();
+  const addresses = await getAddresses();
+  console.log(addresses);
+  placePins(addresses, map, geocoder);
+}
+
+/* Gets json data from datastore and processes into addresses */
+const getAddresses = () => {
+  var addresses = [];
+  return fetch("/list-cafe")
+  .then(response => response.json())
+  .then((cafes) => {
+    for (cafe in cafes) {
+      addresses.push(cafes[cafe].address);
+    }
+    return addresses;
+  });
+}
+
+/* Takes in list of text addresses and puts pins on map Geolocations */
+const placePins = (addresses, map, geocoder) => {
+  addresses.forEach((address) =>  {
+    geocoder.geocode( { 'address': address }, (results, status) => {
+      if(status == 'OK') {
+        // Place marker
+        var marker = new google.maps.Marker({
+          map: map,
+          position: results[0].geometry.location
+        });
+        console.log(results[0].geometry.location);
+        console.log("OK");
+      }
+      else {
+        alert('Geocode failed, reason: ' + status);
+        console.log("Oops");
+      }
+    });
   });
 }
