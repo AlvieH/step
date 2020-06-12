@@ -15,12 +15,16 @@
 package com.google.sps.data;
 
 /* Represents a user-uploaded coffee shop at specific address */
-public class Cafe {
-  String address;
-  boolean isStarbucks;
+public final class Cafe {
+  private final String address;
+  private final boolean isStarbucks;
 
-  public Cafe(String address, boolean starbucks) {
+  private Cafe(String address, boolean starbucks) {
     this.address = address;
     this.isStarbucks = starbucks;
+  }
+
+  public static Cafe makeNewCafe(String address, boolean starbucks) {
+    return new Cafe(address, starbucks);
   }
 }

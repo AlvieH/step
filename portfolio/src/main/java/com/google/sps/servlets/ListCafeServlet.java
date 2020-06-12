@@ -47,7 +47,7 @@ public class ListCafeServlet extends HttpServlet {
       String address = (String) entity.getProperty("address");
       boolean isStarbucks = (boolean) entity.getProperty("starbucks");
       
-      Cafe cafe = new Cafe(address, isStarbucks);
+      Cafe cafe = Cafe.makeNewCafe(address, isStarbucks);
       cafes.add(cafe);
     }
 
