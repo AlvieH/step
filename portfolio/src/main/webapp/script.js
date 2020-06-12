@@ -127,3 +127,22 @@ const slideToggle = (elementId, duration)  => {
     slideUp(elementId, duration);
   }
 }
+
+/* Fetches comments content from webserver and adds to DOM in container with id elementId. */
+const appendCommentsByElementId = (elementId) => {
+  const destination = document.getElementById(elementId);
+  
+  fetch("/comments")
+  .then(response => response.json())
+  .then((comments) => {
+    // add each parsed json object to the DOM.
+    comments.map(comment => comment.text).forEach((text) => destination.appendChild(createElement(text)));
+  });
+}
+
+/* Creates an element to be added to the DOM containing 'text'. */
+const createElement = (text) => {
+  const element = document.createElement("span");
+  element.innerText = text;
+  return element;
+}
