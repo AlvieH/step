@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 const AUDIO_LOCATION_ = "/files/audio/"
+
 /**
  * Adds a random greeting to the page.
  */
@@ -127,30 +128,71 @@ const slideToggle = (elementId, duration)  => {
     slideUp(elementId, duration);
   }
 }
+/* Processes data and calls functions to initialize map and chart objects */
+async function showCafeData() {
+  const cafeData = await processData();
+  
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(() => {
+    drawChart(cafeData.numStarbucks, cafeData.numNonStarbucks);
+  });
+  
+  initMap(cafeData.addresses);
+}
 
 /* Initializes map object and calls setMarkers */
-async function initMap() {
+const initMap = (addresses) => {
   const map = new google.maps.Map(document.getElementById("map"), {
     center: {lat: 42.278481, lng: -83.740997}, 
     zoom: 50
   });
 
-  const geocoder = new google.maps.Geocoder();
-  const addresses = await getAddresses();
-  console.log(addresses);
+  const geocoder = new google.maps.Geocoder(); 
   placePins(addresses, map, geocoder);
 }
 
-/* Gets json data from datastore and processes into addresses */
-const getAddresses = () => {
+/* Displays chart of starbucks vs. non-starbucks cafes selected */
+const drawChart = (numStarbucks, numNonStarbucks) => {
+  const data = google.visualization.arrayToDataTable([
+    ["Type of Cafe", "Number of cafes", {role: "style"}],
+    ["Starbucks", numStarbucks, "#00704A"], 
+    ["Non-Starbucks Entity", numNonStarbucks, "#db1647"]
+  ]);
+
+  const view = new google.visualization.DataView(data);
+  const options = {
+    title: "Number of Starbucks vs. Non-Starbucks in Favorite Cafes",
+    width: 600,
+    height: 400, 
+    bar: {groupWidth: "95%"}, 
+    legend: {position: "none"}
+  };
+  
+  const chart = new google.visualization.ColumnChart(document.getElementById("chart"));
+  chart.draw(view, options);
+}
+
+/* Gets json data from datastore and processes into addresses and starbucks info*/
+const processData = () => {
   var addresses = [];
+  var starbucks = 0;
+  var nonStarbucks = 0;
   return fetch("/list-cafe")
   .then(response => response.json())
   .then((cafes) => {
+    // Get addresses parsed into strings, starbucks numbers parsed into ints
     for (cafe in cafes) {
       addresses.push(cafes[cafe].address);
+      cafes[cafe].isStarbucks == true ? starbucks += 1 : nonStarbucks += 1; 
     }
-    return addresses;
+
+    const returnData = {
+          addresses: addresses,
+          numStarbucks: starbucks,
+          numNonStarbucks: nonStarbucks
+    };
+
+    return returnData;
   });
 }
 

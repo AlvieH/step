@@ -38,6 +38,6 @@ public class NewCafeServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(cafeEntity);
 
-    response.sendRedirect("images.html");
+    response.sendRedirect("maps.html");
   }
 }

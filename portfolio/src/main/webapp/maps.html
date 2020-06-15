@@ -11,7 +11,8 @@
       rel="stylesheet">
     <script src="script.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCib_0RH1hdeDTEpXE4QDt2EVukkmH3jvI"
-  type="text/javascript"></script>
+      type="text/javascript"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
   </head>
   <header>
   <nav class="nav">
@@ -29,8 +30,8 @@
     </ul>
   </nav>
   </header>
-  <body onload="initMap();">
-    <form id="map-form" method="POST" action="/new-coffee-shop">
+  <body onload="showCafeData();">
+    <form id="map-form" method="POST" action="/new-cafe">
       <p>Please put in the address of your favorite coffee place:</p>
       <input type="text" name="address">
       </br>
@@ -39,7 +40,7 @@
       </br></br>
       <button>Submit</button>
     </form>
-    <div id="map">
-    </div>
+    <div id="map"></div>
+    <div id="chart"></div>
   </body>
 </html>

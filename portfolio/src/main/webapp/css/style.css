@@ -279,3 +279,8 @@ nav .menu-links a:hover, .title:hover {
   width: 600px;
   height: 600px;
 }
+
+#chart {
+  width: 600px;
+  height: 600px;
+}
