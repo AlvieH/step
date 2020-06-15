@@ -19,12 +19,8 @@ public final class Cafe {
   private final String address;
   private final boolean isStarbucks;
 
-  private Cafe(String address, boolean starbucks) {
+  private Cafe(String address, boolean isStarbucks) {
     this.address = address;
-    this.isStarbucks = starbucks;
-  }
-
-  public static Cafe makeNewCafe(String address, boolean starbucks) {
-    return new Cafe(address, starbucks);
+    this.isStarbucks = isStarbucks;
   }
 }
