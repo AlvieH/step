@@ -18,6 +18,8 @@ import java.util.*;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    // In this case, long to int conversion is safe because duration is always in int form. Leaving duration as long
+    // leads to compile errors.
     int duration = (int)request.getDuration();
 
     // If request is longer than length of day, then there would never be any options
@@ -26,10 +28,10 @@ public final class FindMeetingQuery {
     }
 
     // Seperate relevant TimeRanges from events, put into ArrayList and sort by ascending meeting start time
-    ArrayList<TimeRange> meetings = new ArrayList<TimeRange>();
-    events.forEach(event -> {
+    List<TimeRange> meetings = new ArrayList<>();
+    for (Event event : events) {
       // First check if the event in question contains people from request
-      Set<String> attendees = new HashSet<String>(request.getAttendees());
+      Set<String> attendees = new HashSet<>(request.getAttendees());
       attendees.retainAll(event.getAttendees());
 
       int numMeetings = meetings.size();
@@ -40,7 +42,7 @@ public final class FindMeetingQuery {
         meetings.add(event.getWhen());
       }
 
-    });
+    }
 
     Collections.sort(meetings, TimeRange.ORDER_BY_START);
 
@@ -50,7 +52,7 @@ public final class FindMeetingQuery {
     }
     
     // Check if time before first meeting is an opening 
-    ArrayList<TimeRange> openings = new ArrayList<TimeRange>();
+    List<TimeRange> openings = new ArrayList<>();
     if (meetings.get(0).start() - TimeRange.START_OF_DAY >= duration) {
       openings.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, meetings.get(0).start(), false));
     }
@@ -67,7 +69,7 @@ public final class FindMeetingQuery {
   }
 
   // Takes in sorted list of meetings and returns next available TimeRange given, or null if none available with current startTime
-  private TimeRange findNextTime(ArrayList<TimeRange> meetings, int startMeetingIndex, int duration) {
+  private TimeRange findNextTime(List<TimeRange> meetings, int startMeetingIndex, int duration) {
     int startTime = meetings.get(startMeetingIndex).end();
 
     // If this is the last meeting in the list and there's a meeting time that fits, return a meeting time.
