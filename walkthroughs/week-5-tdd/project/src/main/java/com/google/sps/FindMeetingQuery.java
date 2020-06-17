@@ -36,7 +36,7 @@ public final class FindMeetingQuery {
     // Seperate relevant TimeRanges from events, put into ArrayList and sort by ascending meeting start time
     List<TimeRange> attendedMeetings = new ArrayList<>();
     for (Event event: events) {
-      // First check if the event in question contains people from request
+      // First check if the event in question contains people from request, add those meetings to attendedMeetings
       Set<String> attendees = new HashSet<>(request.getAttendees());
       attendees.retainAll(event.getAttendees());
 
@@ -45,6 +45,7 @@ public final class FindMeetingQuery {
       }
     }
 
+    // Sort attendedMeetings so that we can filter out all nested meetings in next step
     Collections.sort(attendedMeetings, TimeRange.ORDER_BY_START);
 
     List<TimeRange> validMeetings = new ArrayList<>();
@@ -53,7 +54,7 @@ public final class FindMeetingQuery {
       
       int numMeetings = validMeetings.size();
 
-      // Only add meeting if A) there are people attending and B) it's not nested within the previous meeting
+      // Filter out nested meetings
       if(numMeetings == 0 
         || meeting.end() > validMeetings.get(numMeetings - 1).end()) {
         validMeetings.add(meeting);
