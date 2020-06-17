@@ -35,7 +35,7 @@ public final class FindMeetingQuery {
 
     // Seperate relevant TimeRanges from events, put into ArrayList and sort by ascending meeting start time
     List<TimeRange> attendedMeetings = new ArrayList<>();
-    for (Event event: events) {
+    for (Event event : events) {
       // First check if the event in question contains people from request, add those meetings to attendedMeetings
       Set<String> attendees = new HashSet<>(request.getAttendees());
       attendees.retainAll(event.getAttendees());
