@@ -14,11 +14,17 @@
 
 package com.google.sps;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.List;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    // In this case, long to int conversion is safe because duration is always in int form. Leaving duration as long
+    // In this case, long to int conversion is safe because duration can never exceed 2^32. Leaving duration as long
     // leads to compile errors.
     int duration = (int)request.getDuration();
 
