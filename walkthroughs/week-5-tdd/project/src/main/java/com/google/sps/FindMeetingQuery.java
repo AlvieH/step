@@ -26,7 +26,7 @@ public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     // In this case, long to int conversion is safe because duration can never exceed 2^32. Leaving duration as long
     // leads to compile errors.
-    int duration = (int)request.getDuration();
+    int duration = (int) request.getDuration();
 
     // If request is longer than length of day, then there would never be any options
     if (duration > TimeRange.WHOLE_DAY.duration()) {
