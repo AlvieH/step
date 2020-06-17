@@ -34,38 +34,46 @@ public final class FindMeetingQuery {
     }
 
     // Seperate relevant TimeRanges from events, put into ArrayList and sort by ascending meeting start time
-    List<TimeRange> meetings = new ArrayList<>();
-    for (Event event : events) {
+    List<TimeRange> attendedMeetings = new ArrayList<>();
+    for (Event event: events) {
       // First check if the event in question contains people from request
       Set<String> attendees = new HashSet<>(request.getAttendees());
       attendees.retainAll(event.getAttendees());
 
-      int numMeetings = meetings.size();
+      if (!attendees.isEmpty()){
+        attendedMeetings.add(event.getWhen());
+      }
+    }
+
+    Collections.sort(attendedMeetings, TimeRange.ORDER_BY_START);
+
+    List<TimeRange> validMeetings = new ArrayList<>();
+
+    for (TimeRange meeting : attendedMeetings) {
+      
+      int numMeetings = validMeetings.size();
 
       // Only add meeting if A) there are people attending and B) it's not nested within the previous meeting
-      if(!attendees.isEmpty() && 
-        (numMeetings == 0 || event.getWhen().end() > meetings.get(numMeetings - 1).end())) {
-        meetings.add(event.getWhen());
+      if(numMeetings == 0 
+        || meeting.end() > validMeetings.get(numMeetings - 1).end()) {
+        validMeetings.add(meeting);
       }
 
     }
-
-    Collections.sort(meetings, TimeRange.ORDER_BY_START);
-
     // If there are no remaining meetings, entire day is free
-    if (meetings.isEmpty()) {
+    if (validMeetings.isEmpty()) {
       return Arrays.asList(TimeRange.WHOLE_DAY);
     }
     
     // Check if time before first meeting is an opening 
     List<TimeRange> openings = new ArrayList<>();
-    if (meetings.get(0).start() - TimeRange.START_OF_DAY >= duration) {
-      openings.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, meetings.get(0).start(), false));
+    if (validMeetings.get(0).start() - TimeRange.START_OF_DAY >= duration) {
+      openings.add(TimeRange.fromStartEnd(TimeRange.START_OF_DAY, validMeetings.get(0).start(), false));
     }
 
     // Run findNextTime on each element of meetings in order to find all stretches of available time
-    for (int i = 0; i < meetings.size(); ++i) {
-      TimeRange meetingTime = findNextTime(meetings, i, duration);
+    for (int i = 0; i < validMeetings.size(); ++i) {
+      TimeRange meetingTime = findNextTime(validMeetings, i, duration);
       if (meetingTime != null) {
         openings.add(meetingTime);
       }
