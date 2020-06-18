@@ -54,7 +54,10 @@ public final class FindMeetingQuery {
       
       int numMeetings = validMeetings.size();
 
-      // Filter out nested meetings
+      // Fill in validMeetings. Meetings are sorted by start and end times. If multiple meetings
+      // start at the same time, then one or more will be added, with the longest always being kept
+      // and the shortest either being kept (if they come before the longest) or removed (if they come
+      // after the longest). These meetings will then be sorted out later.
       if(numMeetings == 0 
         || meeting.end() > validMeetings.get(numMeetings - 1).end()) {
         validMeetings.add(meeting);
