@@ -14,6 +14,7 @@
 
 package com.google.sps;
 
+import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,22 +36,62 @@ public final class FindMeetingQuery {
 
     // Seperate relevant TimeRanges from events, put into ArrayList and sort by ascending meeting start time
     List<TimeRange> attendedMeetings = new ArrayList<>();
+    List<TimeRange> allAttendedMeetings = new ArrayList<>();
     for (Event event : events) {
       // First check if the event in question contains people from request, add those meetings to attendedMeetings
-      Set<String> attendees = new HashSet<>(request.getAttendees());
-      attendees.retainAll(event.getAttendees());
+      // Attendees is only required attendees, allAttendees includes optional attendees
+      Set<String> requiredAttendees = new HashSet<>(request.getAttendees());
+      Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
+      Set<String> allAttendees = new HashSet<>(Sets.union(requiredAttendees, optionalAttendees));
+      requiredAttendees.retainAll(event.getAttendees());
+      allAttendees.retainAll(event.getAttendees());
 
-      if (!attendees.isEmpty()){
+      if (!requiredAttendees.isEmpty()){
         attendedMeetings.add(event.getWhen());
       }
+
+      if (!allAttendees.isEmpty()) {
+        allAttendedMeetings.add(event.getWhen());
+      }
+
     }
 
     // Sort attendedMeetings so that we can filter out all nested meetings in next step
     Collections.sort(attendedMeetings, TimeRange.ORDER_BY_START);
+    Collections.sort(allAttendedMeetings, TimeRange.ORDER_BY_START);
 
-    List<TimeRange> validMeetings = new ArrayList<>();
+    List<TimeRange> requiredOpenings = new ArrayList<>(findOpenings(attendedMeetings, duration));
+    List<TimeRange> allOpenings = new ArrayList<>(findOpenings(allAttendedMeetings, duration));
 
-    for (TimeRange meeting : attendedMeetings) {
+    return allOpenings.size() == 0 ? requiredOpenings : allOpenings;
+  }
+
+  // Takes in sorted list of meetings and returns next available TimeRange given, or null if none available with current startTime
+  private TimeRange findNextTime(List<TimeRange> meetings, int startMeetingIndex, int duration) {
+    int startTime = meetings.get(startMeetingIndex).end();
+
+    // If this is the last meeting in the list and there's a meeting time that fits, return a meeting time.
+    if (startMeetingIndex == meetings.size() - 1) {
+      return (startTime + duration <= TimeRange.END_OF_DAY) ? 
+            TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true) 
+            : null;
+    }
+
+    /* If next meeting's start time is farther away than duration,
+     * return a TimeRange from startTime -> the start of the next meeting. */
+    if (meetings.get(startMeetingIndex + 1).start() - startTime >= duration) {
+      return TimeRange.fromStartEnd(startTime, meetings.get(startMeetingIndex + 1).start(), false);
+    }
+    else {
+      return null;
+    }
+  }
+
+  // Takes in sorted list of TimeRanges, filters out nested meetings, and then passes into findNextTime
+  private List<TimeRange> findOpenings(List<TimeRange> meetings, int duration) {
+     List<TimeRange> validMeetings = new ArrayList<>();
+
+    for (TimeRange meeting : meetings) {
       
       int numMeetings = validMeetings.size();
 
@@ -84,26 +125,5 @@ public final class FindMeetingQuery {
     }
     
     return openings;
-  }
-
-  // Takes in sorted list of meetings and returns next available TimeRange given, or null if none available with current startTime
-  private TimeRange findNextTime(List<TimeRange> meetings, int startMeetingIndex, int duration) {
-    int startTime = meetings.get(startMeetingIndex).end();
-
-    // If this is the last meeting in the list and there's a meeting time that fits, return a meeting time.
-    if (startMeetingIndex == meetings.size() - 1) {
-      return (startTime + duration <= TimeRange.END_OF_DAY) ? 
-            TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true) 
-            : null;
-    }
-
-    /* If next meeting's start time is farther away than duration,
-     * return a TimeRange from startTime -> the start of the next meeting. */
-    if (meetings.get(startMeetingIndex + 1).start() - startTime >= duration) {
-      return TimeRange.fromStartEnd(startTime, meetings.get(startMeetingIndex + 1).start(), false);
-    }
-    else {
-      return null;
-    }
   }
 }
