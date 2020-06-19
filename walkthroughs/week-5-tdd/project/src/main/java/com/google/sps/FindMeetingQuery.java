@@ -35,6 +35,9 @@ public final class FindMeetingQuery {
     }
 
     // Seperate relevant TimeRanges from events, put into ArrayList and sort by ascending meeting start time
+    // Optional attendees are handled by running two sets of queries in parallel: a query if we are including optional attendees,
+    // and a query if we are only considering required attendees. If the optional attendee query is empty, then that means that 
+    // there are no valid times if we include optional attendees, and optional attendees are ignored.
     List<TimeRange> attendedMeetings = new ArrayList<>();
     List<TimeRange> allAttendedMeetings = new ArrayList<>();
     for (Event event : events) {
@@ -43,6 +46,8 @@ public final class FindMeetingQuery {
       Set<String> requiredAttendees = new HashSet<>(request.getAttendees());
       Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
       Set<String> allAttendees = new HashSet<>(Sets.union(requiredAttendees, optionalAttendees));
+      
+      // I couldn't think of a way to factor this, I'm sorry Zu :'(
       requiredAttendees.retainAll(event.getAttendees());
       allAttendees.retainAll(event.getAttendees());
 
@@ -60,6 +65,8 @@ public final class FindMeetingQuery {
     Collections.sort(attendedMeetings, TimeRange.ORDER_BY_START);
     Collections.sort(allAttendedMeetings, TimeRange.ORDER_BY_START);
 
+    // All openings represents the availabilities WITH optional attendees, requiredOpenings represents only required attendees.
+    // if allOpenings is empty, that means that there is a conflict with optional attendees and optional attendees should be ignored.
     List<TimeRange> requiredOpenings = new ArrayList<>(findOpenings(attendedMeetings, duration));
     List<TimeRange> allOpenings = new ArrayList<>(findOpenings(allAttendedMeetings, duration));
 
@@ -77,8 +84,8 @@ public final class FindMeetingQuery {
             : null;
     }
 
-    /* If next meeting's start time is farther away than duration,
-     * return a TimeRange from startTime -> the start of the next meeting. */
+    // If next meeting's start time is farther away than duration,
+    // return a TimeRange from startTime -> the start of the next meeting.
     if (meetings.get(startMeetingIndex + 1).start() - startTime >= duration) {
       return TimeRange.fromStartEnd(startTime, meetings.get(startMeetingIndex + 1).start(), false);
     }
