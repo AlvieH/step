@@ -40,14 +40,15 @@ public final class FindMeetingQuery {
     // there are no valid times if we include optional attendees, and optional attendees are ignored.
     List<TimeRange> attendedMeetings = new ArrayList<>();
     List<TimeRange> allAttendedMeetings = new ArrayList<>();
+
+    // Attendees is only required attendees, allAttendees includes optional attendees
+    Set<String> requiredAttendees = new HashSet<>(request.getAttendees());
+    Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
+
     for (Event event : events) {
       // First check if the event in question contains people from request, add those meetings to attendedMeetings
-      // Attendees is only required attendees, allAttendees includes optional attendees
-      Set<String> requiredAttendees = new HashSet<>(request.getAttendees());
-      Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
       Set<String> allAttendees = new HashSet<>(Sets.union(requiredAttendees, optionalAttendees));
       
-      // I couldn't think of a way to factor this, I'm sorry Zu :'(
       requiredAttendees.retainAll(event.getAttendees());
       allAttendees.retainAll(event.getAttendees());
 
@@ -70,6 +71,8 @@ public final class FindMeetingQuery {
     List<TimeRange> requiredOpenings = new ArrayList<>(findOpenings(attendedMeetings, duration));
     List<TimeRange> allOpenings = new ArrayList<>(findOpenings(allAttendedMeetings, duration));
 
+    // As-is, the user will not be aware whether this function is returning allOpenings or requiredOpenings. As-is, the function
+    // simply returns whichever is available.
     return allOpenings.size() == 0 ? requiredOpenings : allOpenings;
   }
 
