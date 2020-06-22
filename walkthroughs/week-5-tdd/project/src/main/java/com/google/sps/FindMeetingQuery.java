@@ -24,6 +24,9 @@ import java.util.Set;
 import java.util.List;
 
 public final class FindMeetingQuery {
+  // Returns available meetings for day given events and request. query will return a list of TimeRanges including optional attendees
+  // if there is availability with optional attendees, and will otherwise return a list of TimeRanges for only required attendees. Returns
+  // an empty List object if there is no availability.
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     // In this case, long to int conversion is safe because duration can never exceed 2^32. Leaving duration as long
     // leads to compile errors.
