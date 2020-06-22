@@ -14,6 +14,7 @@
 
 package com.google.sps;
 
+import com.google.common.collect.Sets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -23,6 +24,9 @@ import java.util.Set;
 import java.util.List;
 
 public final class FindMeetingQuery {
+  // Returns available meetings for day given events and request. query will return a list of TimeRanges including optional attendees
+  // if there is availability with optional attendees, and will otherwise return a list of TimeRanges for only required attendees. Returns
+  // an empty List object if there is no availability.
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     // In this case, long to int conversion is safe because duration can never exceed 2^32. Leaving duration as long
     // leads to compile errors.
@@ -34,23 +38,73 @@ public final class FindMeetingQuery {
     }
 
     // Seperate relevant TimeRanges from events, put into ArrayList and sort by ascending meeting start time
+    // Optional attendees are handled by running two sets of queries in parallel: a query if we are including optional attendees,
+    // and a query if we are only considering required attendees. If the optional attendee query is empty, then that means that 
+    // there are no valid times if we include optional attendees, and optional attendees are ignored.
     List<TimeRange> attendedMeetings = new ArrayList<>();
+    List<TimeRange> allAttendedMeetings = new ArrayList<>();
+
+    // Attendees is only required attendees, allAttendees includes optional attendees
+    Set<String> requiredAttendees = new HashSet<>(request.getAttendees());
+    Set<String> optionalAttendees = new HashSet<>(request.getOptionalAttendees());
+
     for (Event event : events) {
       // First check if the event in question contains people from request, add those meetings to attendedMeetings
-      Set<String> attendees = new HashSet<>(request.getAttendees());
-      attendees.retainAll(event.getAttendees());
+      Set<String> allAttendees = new HashSet<>(Sets.union(requiredAttendees, optionalAttendees));
+      
+      requiredAttendees.retainAll(event.getAttendees());
+      allAttendees.retainAll(event.getAttendees());
 
-      if (!attendees.isEmpty()){
+      if (!requiredAttendees.isEmpty()){
         attendedMeetings.add(event.getWhen());
       }
+
+      if (!allAttendees.isEmpty()) {
+        allAttendedMeetings.add(event.getWhen());
+      }
+
     }
 
     // Sort attendedMeetings so that we can filter out all nested meetings in next step
     Collections.sort(attendedMeetings, TimeRange.ORDER_BY_START);
+    Collections.sort(allAttendedMeetings, TimeRange.ORDER_BY_START);
 
-    List<TimeRange> validMeetings = new ArrayList<>();
+    // All openings represents the availabilities WITH optional attendees, requiredOpenings represents only required attendees.
+    // if allOpenings is empty, that means that there is a conflict with optional attendees and optional attendees should be ignored.
+    List<TimeRange> requiredOpenings = new ArrayList<>(findOpenings(attendedMeetings, duration));
+    List<TimeRange> allOpenings = new ArrayList<>(findOpenings(allAttendedMeetings, duration));
 
-    for (TimeRange meeting : attendedMeetings) {
+    // As-is, the user will not be aware whether this function is returning allOpenings or requiredOpenings. As-is, the function
+    // simply returns whichever is available.
+    return allOpenings.size() == 0 ? requiredOpenings : allOpenings;
+  }
+
+  // Takes in sorted list of meetings and returns next available TimeRange given, or null if none available with current startTime
+  private TimeRange findNextTime(List<TimeRange> meetings, int startMeetingIndex, int duration) {
+    int startTime = meetings.get(startMeetingIndex).end();
+
+    // If this is the last meeting in the list and there's a meeting time that fits, return a meeting time.
+    if (startMeetingIndex == meetings.size() - 1) {
+      return (startTime + duration <= TimeRange.END_OF_DAY) ? 
+            TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true) 
+            : null;
+    }
+
+    // If next meeting's start time is farther away than duration,
+    // return a TimeRange from startTime -> the start of the next meeting.
+    if (meetings.get(startMeetingIndex + 1).start() - startTime >= duration) {
+      return TimeRange.fromStartEnd(startTime, meetings.get(startMeetingIndex + 1).start(), false);
+    }
+    else {
+      return null;
+    }
+  }
+
+  // Takes in sorted list of TimeRanges, filters out nested meetings, and then passes into findNextTime
+  private List<TimeRange> findOpenings(List<TimeRange> meetings, int duration) {
+     List<TimeRange> validMeetings = new ArrayList<>();
+
+    for (TimeRange meeting : meetings) {
       
       int numMeetings = validMeetings.size();
 
@@ -84,26 +138,5 @@ public final class FindMeetingQuery {
     }
     
     return openings;
-  }
-
-  // Takes in sorted list of meetings and returns next available TimeRange given, or null if none available with current startTime
-  private TimeRange findNextTime(List<TimeRange> meetings, int startMeetingIndex, int duration) {
-    int startTime = meetings.get(startMeetingIndex).end();
-
-    // If this is the last meeting in the list and there's a meeting time that fits, return a meeting time.
-    if (startMeetingIndex == meetings.size() - 1) {
-      return (startTime + duration <= TimeRange.END_OF_DAY) ? 
-            TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true) 
-            : null;
-    }
-
-    /* If next meeting's start time is farther away than duration,
-     * return a TimeRange from startTime -> the start of the next meeting. */
-    if (meetings.get(startMeetingIndex + 1).start() - startTime >= duration) {
-      return TimeRange.fromStartEnd(startTime, meetings.get(startMeetingIndex + 1).start(), false);
-    }
-    else {
-      return null;
-    }
   }
 }
