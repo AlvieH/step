@@ -274,3 +274,8 @@ nav .menu-links a:hover, .title:hover {
   margin: 2em 0;
   display: inline-block;
 }
+
+#map {
+  width: 600px;
+  height: 600px;
+}
